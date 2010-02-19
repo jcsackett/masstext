@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 from masstext.models import PhoneNumber
 
@@ -30,7 +31,7 @@ class TextingTestCase(TestCase):
             From='9195555555',
             Body='This is a message.'
         )
-        expected = '<Response><Sms to="9195555556">user1 says: This is a message.</Sms><Response>'
+        expected = ''.join('<?xmlversion="1.0"encoding="UTF-8"?><Response><Sms to="9195555556">user1 says: This is a message.</Sms></Response>'.split())
         r = c.post(url, data)
         received = ''.join(r.content.split())
         self.assertEqual(received, expected)

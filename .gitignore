@@ -1,3 +1,4 @@
+*.swp
 __init__.py
 settings.py
 urls.py

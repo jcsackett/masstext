@@ -2,10 +2,10 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.template import loader, Context
 
-from masstext.models import PhoneNumber
-from masstext.utils import build_response 
+from models import PhoneNumber
+from utils import build_response 
 
-def mass_text(request):
+def masstext(request):
     """The core (and currently only) view. Takes a POST from twilio and returns the sms
     commands.
     @request The HttpRequest
