@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Response>
+    {% for n in numbers %}
+    <Sms to="{{ n }}">{{ msg }}</Sms>
+    {% endfor %}
+</Response>
