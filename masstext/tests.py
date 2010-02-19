@@ -1,23 +1,36 @@
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
+from django.test import TestCase, Client
+from django.contrib.auth.models import User
 
-Replace these with more appropriate tests for your application.
-"""
+from masstext.models import PhoneNumber
 
-from django.test import TestCase
+class TextingTestCase(TestCase):
+    def setUp(self):
+        u1 = User(username='user1')
+        u2 = User(username='user2')
+        u1.save()
+        u2.save()
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+        pn1 = PhoneNumber(owner=u1, number='9195555555')
+        pn2 = PhoneNumber(owner=u2, number='9195555556')
+        pn1.save()
+        pn2.save()
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
+    def test_mass_text_get(self):
+        #tests that gets return nothing
+        url = reverse('masstext')
+        c = Client()
+        r = c.get(url)
+        self.assertEqual(r.content, "You don't get how this works, do you?")
 
->>> 1 + 1 == 2
-True
-"""}
-
+    def test_mass_text_post(self):
+        #tests that posts work
+        url = reverse('masstext')
+        c = Client()
+        data = dict(
+            From='9195555555',
+            Body='This is a message.'
+        )
+        expected = '<Response><Sms to="9195555556">user1 says: This is a message.</Sms><Response>'
+        r = c.post(url, data)
+        received = ''.join(r.content.split())
+        self.assertEqual(received, expected)

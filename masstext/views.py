@@ -2,27 +2,19 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.template import loader, Context
 
-from myproject.texts.models import PhoneNumber
-
-def build_response(user, new_numbers, body):
-    msg = '%s says: %s' % (user.username, body)
-    t = loader.get_template('response.xml')
-    c = Context({
-        'numbers':new_numbers,
-        'msg':msg
-    })
-
-    xml = t.render(c)
-
-    return HttpResponse(xml, mimetype='text/xml')
+from masstext.models import PhoneNumber
+from masstext.utils import build_response 
 
 def mass_text(request):
-    
+    """The core (and currently only) view. Takes a POST from twilio and returns the sms
+    commands.
+    @request The HttpRequest
+    """
     if request.method == 'GET':
-        return HttpResponse('This is not working.')
+        return HttpResponse("You don't get how this works, do you?")
     if request.method == 'POST':
         number = request.POST['From']
-	user = PhoneNumber.objects.get(number=number).owner
+        user = PhoneNumber.objects.get(number=number).owner
         new_numbers = PhoneNumber.objects.get_reply_numbers(number)   
 
         body = request.POST['Body']
