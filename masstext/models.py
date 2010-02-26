@@ -7,6 +7,10 @@ class PhoneNumberManager(models.Manager):
         excluding the sender.
         @number The number of the sender
         """
+        try:
+            pn = self.get(number=number)
+        except PhoneNumber.DoesNotExist:
+            return [] 
         return [pn.number for pn in self.exclude(number=number)]
 
 class PhoneNumber(models.Model):
@@ -18,3 +22,4 @@ class PhoneNumber(models.Model):
         return u'%s, for %s' % (self.number, self.owner.username)
 
     objects = PhoneNumberManager()
+
