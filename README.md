@@ -1,4 +1,4 @@
-MassText 0.1
+MassText 0.2
 ============
 
 **Author: j.c.sackett (j.c.sackett@gmail.com) (@jaycee)**
