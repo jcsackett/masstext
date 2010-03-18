@@ -12,6 +12,10 @@ class PhoneNumberManager(models.Manager):
             pn = self.get(number=number)
         except PhoneNumber.DoesNotExist:
             return [] 
+        
+        if pn.call_list.moderated and not pn.can_send:
+            return []
+        
         return [pn.number for pn in self.exclude(number=number)]
 
 
